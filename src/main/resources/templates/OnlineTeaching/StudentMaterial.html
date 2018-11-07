@@ -1,16 +1,75 @@
-
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
 	哈尔滨华德学院学生预约答疑管理平台
-</title><link href="../Style/StudentStyle.css" rel="stylesheet" type="text/css" /><link href="../Script/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" /><link href="../Style/ks.css" rel="stylesheet" type="text/css" />
-    <script src="../Script/jBox/jquery-1.4.2.min.js" type="text/javascript"></script>
+</title><link href="../Style/StudentStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../Script/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/ks.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="../Script/jquery3.0.js" type="text/javascript"></script>
+
     <script src="../Script/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
     <script src="../Script/jBox/i18n/jquery.jBox-zh-CN.js" type="text/javascript"></script>
+
     <script src="../Script/Common.js" type="text/javascript"></script>
     <script src="../Script/Data.js" type="text/javascript"></script>
+    <script src="../Script/bootstrap.js" type="text/javascript"></script>
+    <script src="../Script/studentmaterial.js" type="text/javascript"></script><script src="../laydate/laydate.js" type="text/javascript"></script>
+    <style>
+
+        .demo-input{padding-left: 10px;height: 38px; min-width: 262px; line-height: 38px;
+            border: 1px solid #e6e6e6; background-color: #fff; border-radius: 2px; }
+        .demo-footer{padding: 50px 0; color:#999; font-size: 14px;}
+        .demo-footer a{padding:0 5px; color: #01AAED;}
+    </style>
+
+    <script th:inline="javascript">
+        function load() {
+            var teacherTimes = new Array();
+            var states = new Array();
+            teacherTimes = [[${teacherTimes}]];
+            states = [[${states}]];
+            var tbodyhtml = "id = 'tbody1' class='tbody1'  ";
+            for(var i=0; i<teacherTimes.length; i++){
+           //     alert(teacherTimes[i]);
+                var x = new Date(teacherTimes[i]);
+         //       alert(ddd(x));
+                var trhtml = "<tr>" +"<td>"+(i+1)+"</td>"+"<td >"+ddd(x)+"</td>";
+                if(states[i]==0){
+                    trhtml += "<td>未预约</td>"+"<td> <button type='button' class='btn btn-danger' name='"+ddd(x)+"' onclick='delTime(this)' >删除</button> </td>"+"</tr>";
+                }else{
+                    trhtml += "<td>已预约</td>"+"<td> <button type='button' class='btn btn-danger'>删除</button> </td>"+"</tr>";
+                }
+                tbodyhtml += trhtml;
+
+            }
+            $("#tbody1").html(tbodyhtml);
+        }
+
+        function ddd(date) {
+
+
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1,//月份是从0开始的
+                day = date.getDate(),
+                hour = date.getHours(),
+                min = date.getMinutes(),
+                sec = date.getSeconds();
+            var newTime = year + '-' +
+                (month < 10 ? '0' + month : month) + '-' +
+                (day < 10 ? '0' + day : day) + ' ' +
+                (hour < 10 ? '0' + hour : hour) + ':' +
+                (min < 10 ? '0' + min : min);
+
+            return newTime;
+        }
+
+    </script>
+    <style>
+        .ttt{text-align:center;}
+    </style>
     <script type="text/javascript">
+
         $().ready(function () {
             setStudMsgHeadTabCheck();
             showUnreadSysMsgCount();
@@ -81,9 +140,34 @@
             }
         }
     </script>
-    
+
     <script src="../Script/Common.js" type="text/javascript"></script>
     <script type="text/javascript">
+
+        lay('#version').html('-v'+laydate.v),
+            laydate.render({
+                elem: '#test1'
+            });
+
+        laydate.render({
+            elem: '#test2'
+            ,type: 'year'
+        });
+        //年月选择器
+        laydate.render({
+            elem: '#test3'
+            ,type: 'month'
+        });
+        //时间选择器
+        laydate.render({
+            elem: '#test4'
+            ,type: 'time'
+        });
+        //时间选择器
+        laydate.render({
+            elem: '#test5'
+            ,type: 'datetime'
+        });
         function searchData(ctype, type) {
             if (type == "t") {
                 var c = $("#cValue").val();
@@ -112,28 +196,28 @@
         });
     </script>
 </head>
-<body>
+<body onload="load()">
 
 
     <div class="banner">
         <div class="bgh">
             <div class="page">
                 <div id="logo">
-                    <a href="../Index.html">
+                    <a href="../Index">
                         <img src="../Images/Student/logo.gif" alt="" width="165" height="48" />
                     </a>
                 </div>
                 <div class="topxx">
                     
-                    方海诺老师，欢迎您！ <a href="MyInfo/Index.html">我的信息</a> <a href="User/StudentInfor/systemMsge.html">
-                        通知</a> <a href="User/Account/ChangePasswd.html">密码修改</a> <a onclick="loginOut()"
+                    方海诺老师，欢迎您！ <a href="MyInfo/Index">我的信息</a> <a href="User/StudentInfor/systemMsge">
+                        通知</a> <a href="User/Account/ChangePasswd">密码修改</a> <a onclick="loginOut()"
                             href="javascript:">安全退出</a>
                 </div>
                 <div class="blog_nav">
                     <ul>
-                        <li><a href="Index.html">我的信息</a></li>
-                        <li><a href="EducationCenter/Score.html">答疑汇总</a></li>
-                        <li><a href="MyAccount/wdcw.html">预约答疑</a></li>
+                        <li><a href="Index">我的信息</a></li>
+                        <li><a href="EducationCenter/Score">答疑汇总</a></li>
+                        <li><a href="MyAccount/wdcw">预约答疑</a></li>
                     </ul>
                 </div>
             </div>
@@ -150,52 +234,31 @@
                     </div>
                     <div class="cdlist">
                         <div>
-                            <a href="MyInfo/Index.html">我的信息</a></div>
+                            <a href="../MyInfo/Index">我的信息</a></div>
                         <div>
-                            <a href="MyInfo/ClassInfo.html">班级信息 </a>
+                            <a href="../MyInfo/ClassInfo">班级信息 </a>
                         </div>
                         <div>
-                            <a href="User/StudentInfor/Letter.html">短信息</a></div>
+                            <a href="../User/StudentInfor/Letter">短信息</a></div>
                         <div>
-                            <a href="User/StudentInfor/systemMsge.html">学院通知</a></div>
-                        
+                            <a href="../User/StudentInfor/systemMsge">学院通知</a></div>
+
                     </div>
-                    <div class="ta1">
-                        <strong>答疑汇总</strong>
-                        <div class="leftbgbt2">
-                        </div>
-                    </div>
-                    <div class="cdlist">
-                        <div>
-                            <a href="EducationCenter/Application.html">答疑数量</a></div>
-                        <div>
-                            <a href="EducationCenter/Score.html">答疑汇总</a></div>
-                        <div>
-                            <a href="EducationCenter/Book.html">答疑概况分析</a></div>
-							<div>
-                            <a href="EducationCenter/Book.html">答疑反馈问题</a></div>
-							<div>
-                            <a href="EducationCenter/Book.html">反馈问题分析</a></div>
-							
-                            
-                    </div>
+
                     <div class="ta1">
                         <strong>预约答疑</strong><div class="leftbgbt2">
-                        </div>
+                    </div>
                     </div>
                     <div class="cdlist">
                         <div>
-                            <a href="OnlineTeaching/StudentMaterial.html">上传时间表</a></div>
+                            <a href="StudentMaterial">上传时间表</a></div>
                         <div>
-                            <a href="OnlineTeaching/StudentStudyRecordList.html">预约申请</a></div>
-							<div>
-                            <a href="OnlineTeaching/StudentStudyRecordList.html">预约完成情况</a></div>
+                            <a href="StudentStudyRecordList">预约申请</a></div>
+                        <div>
+                            <a href="OrderFinish">预约完成情况</a></div>
                     </div>
-<div class="ta1">
-                        <a href="http://www.csgb.net/login.aspx?userLoginName=2014&userName=方海诺&professionId=F40C998A-D9AC-421F-99C9-C024C1DC53AD&flag=sm" target="_blank"><strong>教学系统</strong></a>
-                        <div class="leftbgbt2">
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
             <div class="rightbox">
@@ -207,431 +270,28 @@
     <input type="hidden" id="cValue" value="" />
     <input type="hidden" id="tValue" value="" />
     <div class="fllist">
-        <ul>
-            <li><strong>材料：</strong><a href="#" id="cAll" onclick='searchData("","c")'>全部</a>
-                
-                <a href="#" id="8c7743e8-0818-41fa-bc86-44407ca2f773" onclick="searchData('8c7743e8-0818-41fa-bc86-44407ca2f773','c')">
-                    教材（ppt）</a>
-                
-                <a href="#" id="e3d9b090-9465-44a1-887c-90d74f7f7899" onclick="searchData('e3d9b090-9465-44a1-887c-90d74f7f7899','c')">
-                    课设安排</a>
-                
-                <a href="#" id="f3b98347-fe96-49fc-b076-93bd5855341f" onclick="searchData('f3b98347-fe96-49fc-b076-93bd5855341f','c')">
-                    课设封皮</a>
-                
-                <a href="#" id="30cfc816-fbc4-4b62-b688-9be0d7b29401" onclick="searchData('30cfc816-fbc4-4b62-b688-9be0d7b29401','c')">
-                    课设论文模板</a>
-                
-                <a href="#" id="8757ba5a-64eb-4a4d-83f6-aa3740cf1a6f" onclick="searchData('8757ba5a-64eb-4a4d-83f6-aa3740cf1a6f','c')">
-                    毕业设计论文要求</a>
-                
-                <a href="#" id="989d8840-4db1-4081-8c2c-6374d26e5940" onclick="searchData('989d8840-4db1-4081-8c2c-6374d26e5940','c')">
-                    毕业设计论文模板</a>
-                
-                <a href="#" id="e8d53554-c58d-4362-a02d-3fb0aab793c1" onclick="searchData('e8d53554-c58d-4362-a02d-3fb0aab793c1','c')">
-                    大创教学</a>
-                
-                <a href="#" id="69154904-33f8-4d29-8e03-61519ac50197" onclick="searchData('69154904-33f8-4d29-8e03-61519ac50197','c')">
-                    理论学习</a>
-            </li>
-            <li><strong>类型：</strong><a href="#" id="tAll" onclick="searchData('','t')">全部</a>
-                
-                <a href="#" id="1" onclick="searchData('1','t')">
-                    复习资料</a>
-                
-                <a href="#" id="2" onclick="searchData('2','t')">
-                    练习题</a>
-                
-                <a href="#" id="3" onclick="searchData('3','t')">
-                    内部资料</a>
-                
-                <a href="#" id="4" onclick="searchData('4','t')">
-                    真题</a>
-				<a href="#" id="5" onclick="searchData('4','t')">
-                    日常学习</a>
-                
-            </li>
-        </ul>
+        <input type="text" class="demo-input" placeholder="请选择日期" id="test5"  />
+        <button class="btn btn-warning" type="button" id="sub1" onclick="submitTime()" >提交</button>
         <div class="cztable">
-            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
-                <tr>
-                <th width="6%">格式</th>
-                    <th style="padding-left: 20px;">
-                        资料名称
-                    </th>
-                    <th style="width: 15%; text-align: center;">
-                        资料类型
-                    </th>
-                    <th style="width: 15%; text-align: center;">
-                        更新时间
-                    </th>
-                    <th style="width: 15%; text-align: center;">
-                        操作
-                    </th>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        英语二
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2018-04-11
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/19b4ca24-e7a2-48f0-9ee6-7808631b5c23.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/default.jpg' /></td>
-                    <td class="xxleft">
-                        
-                        环境法学
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-30
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/fe3218c5-855f-4d7f-a073-5f2c713bea26.xls" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/default.jpg' /></td>
-                    <td class="xxleft">
-                        
-                        行政诉讼法
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-30
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/47fd23d7-b9be-4d32-8e90-8ee291758ba3.xls" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/default.jpg' /></td>
-                    <td class="xxleft">
-                        
-                        行政诉讼法
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-30
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/cdb01c24-8893-4722-b3a7-7ba094db9c18.xls" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        税法原理
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-30
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/c8da4780-4813-4f4e-bc2e-3fa9c7ad8b98.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        税法原理
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-30
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/446a67aa-53b5-4b17-87dc-d458b769b382.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        企业与公司法
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-30
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/9638b66a-1591-46b7-9115-874d2c072a00.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        行政诉讼法
-                    </td>
-                    <td>
-                        练习题
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/5d7dc4d4-02c0-4702-86b7-4ccb1d39735b.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        环境法学
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/a6c6912d-eb68-4e3b-8fd1-02d773b46f0c.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        房地产法
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/78914634-6280-4962-b878-62d9101db368.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        房地产法
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/d08d2755-4429-4034-a083-89c62c0f665f.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        房地产法
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/d6292a5c-2d0d-4065-ae6e-0d0fa541568d.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        中国近现代史纲要
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/8ac28be9-5178-4c13-b39d-d5a242577fe0.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        中国近现代史纲要
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/a97d11e6-ac3d-44fe-aefe-263a5b7b957d.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        中国近现代史纲要
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/6b246260-a817-4f56-91cf-61936d5a3f0c.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        英语2
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/88db3182-6abd-4ead-8ce7-732b2d5ce2c1.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        英语2
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/5e093a1c-68ea-446b-8e0e-0eb6f8e6978b.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        英语2
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/f854d888-3225-4d1b-b6db-602aa7166971.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        英语2
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/85a262b0-ee1d-4d24-a427-1924516db646.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
-                <tr>
-                <td><img src='../Images/FileIco/doc.gif' /></td>
-                    <td class="xxleft">
-                        
-                        英语2
-                    </td>
-                    <td>
-                        复习资料
-                    </td>
-                    <td>
-                        2017-09-29
-                    </td>
-                    <td>
-                        <a href="http://admin.zk0731.com/StudentData/201309/e026512a-6c44-4dad-a2f7-b517079ce2b8.doc" target="_blank">
-                            <img src="../Images/down.gif" alt="点击下载" /></a>
-                    </td>
-                </tr>
-                
+            <table class="table table-hover" style="text-align:center;margin: auto">
+                <thead class="ttt">
+                    <th class="ttt" >编号</th>
+                    <th class="ttt" >时间</th>
+                    <th class="ttt">状态</th>
+                    <th class="ttt">操作</th>
+                </thead>
+                <tbody id="tbody1" name="tbody1">
+                    <tr>
+                        <th >1</th>
+                        <th >2018年11月7日10:00</th>
+                        <th >未预约</th>
+                        <th >
+                            <button type="button" class="btn btn-danger">删除</button>
+                        </th>
+                    </tr>
+                </tbody>
+
             </table>
-            <div class='MainStyle'><div class=''><a href='http://sm.zk0731.com/OnlineTeaching/StudentMaterial.aspx?page=1' target='_self'>首页</a></div><div class=''><a href='javascript:void(0)' target='_self'>上一页</a></div><div class='NowItemStyle'><a href='javascript:void(0)' target='_self'>1</a></div><div class=''><a href='http://sm.zk0731.com/OnlineTeaching/StudentMaterial.aspx?page=2' target='_self'>2</a></div><div class=''><a href='http://sm.zk0731.com/OnlineTeaching/StudentMaterial.aspx?page=3' target='_self'>3</a></div><div class=''><a href='http://sm.zk0731.com/OnlineTeaching/StudentMaterial.aspx?page=2' target='_self'>下一页</a></div><div class=''><a href='http://sm.zk0731.com/OnlineTeaching/StudentMaterial.aspx?page=3' target='_self'>尾页</a></div><div class=''>总共<b>44</b>条数据</div><div class=''>每页<b>20</b>条数据</div><div class=''><b>1</b>/3</div><div class='SearchStyle'><input type='text' id='john_Page_Search' onkeydown="if(event.keyCode == 13){page_searchIndex();}"/></div><div class=''><input type='button' value='Go' onclick="page_searchIndex()"/></div></div><script>    function page_searchIndex(){        var searchText = document.getElementById('john_Page_Search');        var searchIndex = searchText != null && searchText.value != '' ? parseInt(searchText.value) : 0;        if(searchIndex > 0 && searchIndex <= 3) {             window.location='StudentMaterial.aspx?page=' + searchIndex;        }        else        {            alert('需要跳转的页码不能超出范围！');        }    }</script>
         </div>
     </div>
 

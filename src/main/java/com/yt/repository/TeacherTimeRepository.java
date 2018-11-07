@@ -13,6 +13,6 @@ public interface TeacherTimeRepository extends JpaRepository<TeacherTime,Integer
     public TeacherTime findById(int id);
     public List<TeacherTime> findByTeacher_NameAndState(String teacher_name,int state);
     public TeacherTime findByAnswerTime(Date answer_time);
-
+    public TeacherTime findByTeacher_NameAndAnswerTime(String name,Date time);
 
 }

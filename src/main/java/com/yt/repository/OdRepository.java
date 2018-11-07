@@ -11,5 +11,6 @@ public interface OdRepository extends JpaRepository<Od,Integer> {
     public List<Od> findByStudent_NameAndState(String Student_name,int State);
     public List<Od> findByStudent_NameAndStateLessThan(String student_name,int state);
 //    public List<Od> findByStudent_NameAndStateOrStudent_NameOrState(String Student_name,int State1,int state2);
-
+    public Od findByTeacherTime_Id (int id);
+    public Od findByTeacherTime_IdAndState(int id,int state);
 }

@@ -11,7 +11,7 @@ public class Od{
 
     private String answerPlace;
 
-    private int state;//0已提交未同意，1已同意未答疑，2已答疑
+    private int state;//0已提交未同意，1已同意未答疑，2已答疑,3取消答疑
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "student_id")

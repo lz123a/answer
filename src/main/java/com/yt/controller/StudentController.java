@@ -24,7 +24,9 @@ public class StudentController {
     StudentRepository studentRepository;
 
 
-    @RequestMapping("/submitTime")
+
+
+    @RequestMapping("/app/submitTime")
     public Map<String,Object> submitTime(String datetime,String name){
         Date date = new Date();
         Map<String,Object> map = new HashMap<>();
@@ -49,7 +51,7 @@ public class StudentController {
         return map;
     }
 
-    @RequestMapping("/getTeacherTime")
+    @RequestMapping("/app/getTeacherTime")
     public Map<String,Object> getTeacherTime(String teacherName){
         Map<String,Object> map = new HashMap<>();
         List<TeacherTime> teacherTimeList = teacherTimeRepository.findByTeacher_NameAndState(teacherName,0);
@@ -63,7 +65,7 @@ public class StudentController {
     }
 
 
-    @RequestMapping("/studentAnswerTime")
+    @RequestMapping("/app/studentAnswerTime")
     public Map<String,Object> studentAnswerTime(String studentName,int state){
         Map<String,Object> map = new HashMap<>();
         List<Od> odList;

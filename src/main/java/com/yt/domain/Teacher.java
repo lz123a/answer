@@ -1,14 +1,12 @@
 package com.yt.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
 public class Teacher {
     @Id
+    @GeneratedValue
     private int id;
     private String name;
 

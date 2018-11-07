@@ -1,112 +1,91 @@
-
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>
 	哈尔滨华德学院学生预约答疑管理平台
-</title><link href="../Style/StudentStyle.css" rel="stylesheet" type="text/css" /><link href="../Script/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" /><link href="../Style/ks.css" rel="stylesheet" type="text/css" />
-    <script src="../Script/jBox/jquery-1.4.2.min.js" type="text/javascript"></script>
+</title><link href="../Style/StudentStyle.css" rel="stylesheet" type="text/css" />
+    <link href="../Script/jBox/Skins/Blue/jbox.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/ks.css" rel="stylesheet" type="text/css" />
+    <link href="../Style/bootstrap.css" rel="stylesheet" type="text/css" />
+    <script src="../Script/jquery3.0.js" type="text/javascript"></script>
+
     <script src="../Script/jBox/jquery.jBox-2.3.min.js" type="text/javascript"></script>
     <script src="../Script/jBox/i18n/jquery.jBox-zh-CN.js" type="text/javascript"></script>
+
     <script src="../Script/Common.js" type="text/javascript"></script>
     <script src="../Script/Data.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        $().ready(function () {
-            setStudMsgHeadTabCheck();
-            showUnreadSysMsgCount();
-        });
-
-        //我的信息头部选项卡
-        function setStudMsgHeadTabCheck() {
-            var currentUrl = window.location.href;
-            currentUrl = currentUrl.toLowerCase();
-            var asmhm = "";
-            $("#ulStudMsgHeadTab li").each(function () {
-                asmhm = $(this).find('a').attr("href").toLowerCase();
-                if (currentUrl.indexOf(asmhm) > 0) {
-                    $(this).find('a').attr("class", "tab1");
-                    return;
-                }
-            });
-        }
-
-        //显示未读系统信息
-        function showUnreadSysMsgCount() {
-            var unreadSysMsgCount = "0";
-            if (Number(unreadSysMsgCount) > 0) {
-                $("#unreadSysMsgCount").html("(" + unreadSysMsgCount + ")");
-            }
-        }
-
-        //退出
-        function loginOut() {
-            if (confirm("确定退出吗？")) {
-                StudentLogin.loginOut(function (data) {
-                    if (data == "true") {
-                        window.location = "/Login.aspx";
-                    }
-                    else {
-                        jBox.alert("退出失败！", "提示", new { buttons: { "确定": true} });
-                    }
-                });
-            }
-        }
-        //更改报考类别
-        function changeCateory(thisObj, id) {
-            var oldCateoryId = $("#cateoryId").val();
-            var cateoryId = "";
-            if (id != null) {
-                cateoryId = id;
-            }
-            else {
-                cateoryId = thisObj.val();
-            }
-            var studentId = $("#studentId").val();
-            if (cateoryId.length <= 0) {
-                jBox.tip("报考类别不能为空！");
-                if (id == null) {
-                    thisObj.val(oldCateoryId);
-                }
-            }
-            else {
-                studentInfo.changeStudentCateory(cateoryId, function (data) {
-                    var result = $.parseJSON(data);
-                    if ((String(result.ok) == "true")) {
-                        window.location.href = "/Index.aspx";
-                    }
-                    else {
-                        jBox.tip(result.message);
-                    }
-                });
-            }
-        }
-    </script>
-    
-    <script src="../Script/jquery-1.4.1.js" type="text/javascript"></script>
+    <script src="../Script/bootstrap.js" type="text/javascript"></script>
+    <script src="../Script/StudyRecordList.js" type="text/javascript"></script>
+    <script src="../Script/bootbox.js" type="text/javascript"></script>
     <link href="../Style/history.css" rel="stylesheet" type="text/css" />
+
+    <script th:inline="javascript">
+        function load() {
+            var teacherTimes = new Array();
+            var studentNames = new Array();
+
+            studentNames = [[${studentName}]];
+            teacherTimes = [[${teacherTime}]];
+
+
+            var tbodyhtml = "id = 'tbody1' class='tbody1'  ";
+            for(var i=0; i<teacherTimes.length; i++){
+                //     alert(teacherTimes[i]);
+                var x = new Date(teacherTimes[i]);
+                //       alert(ddd(x));
+                var trhtml = "<tr>" +"<td>"+(i+1)+"</td>"+"<td >"+ddd(x)+"</td>";
+                trhtml += "<td>"+studentNames[i]+"</td>"+"<td><button type='button' class='btn btn-success' name='"+ddd(x)+"' onclick='agree(this)' >同意</button> <button type='button' class='btn btn-danger' name='"+ddd(x)+"' onclick='delaTime(this)' >不同意</button></td>"+"</tr>";
+
+                tbodyhtml += trhtml;
+
+            }
+            $("#tbody1").html(tbodyhtml);
+        }
+
+        function ddd(date) {
+
+
+            var year = date.getFullYear(),
+                month = date.getMonth() + 1,//月份是从0开始的
+                day = date.getDate(),
+                hour = date.getHours(),
+                min = date.getMinutes(),
+                sec = date.getSeconds();
+            var newTime = year + '-' +
+                (month < 10 ? '0' + month : month) + '-' +
+                (day < 10 ? '0' + day : day) + ' ' +
+                (hour < 10 ? '0' + hour : hour) + ':' +
+                (min < 10 ? '0' + min : min);
+
+            return newTime;
+        }
+
+    </script>
+    <style>
+        .ttt{text-align:center;}
+    </style>
 </head>
-<body>
+<body onload="load()">
 
 
     <div class="banner">
         <div class="bgh">
             <div class="page">
                 <div id="logo">
-                    <a href="../Index.html">
+                    <a href="../Index">
                         <img src="../Images/Student/logo.gif" alt="" width="165" height="48" />
                     </a>
                 </div>
                 <div class="topxx">
                     
-                    方海诺老师，欢迎您！ <a href="MyInfo/Index.html">我的信息</a> <a href="User/StudentInfor/systemMsge.html">
-                        通知</a> <a href="User/Account/ChangePasswd.html">密码修改</a> <a onclick="loginOut()"
+                    方海诺老师，欢迎您！ <a href="MyInfo/Index">我的信息</a> <a href="User/StudentInfor/systemMsge">
+                        通知</a> <a href="User/Account/ChangePasswd">密码修改</a> <a onclick="loginOut()"
                             href="javascript:">安全退出</a>
                 </div>
                 <div class="blog_nav">
                     <ul>
-                        <li><a href="Index.html">我的信息</a></li>
-                        <li><a href="EducationCenter/Score.html">答疑汇总</a></li>
-                        <li><a href="MyAccount/wdcw.html">预约答疑</a></li>
+                        <li><a href="Index">我的信息</a></li>
+                        <li><a href="EducationCenter/Score">答疑汇总</a></li>
+                        <li><a href="MyAccount/wdcw">预约答疑</a></li>
                     </ul>
                 </div>
             </div>
@@ -123,169 +102,62 @@
                     </div>
                     <div class="cdlist">
                         <div>
-                            <a href="MyInfo/Index.html">我的信息</a></div>
+                            <a href="../MyInfo/Index">我的信息</a></div>
                         <div>
-                            <a href="MyInfo/ClassInfo.html">班级信息 </a>
+                            <a href="../MyInfo/ClassInfo">班级信息 </a>
                         </div>
                         <div>
-                            <a href="User/StudentInfor/Letter.html">短信息</a></div>
+                            <a href="../User/StudentInfor/Letter">短信息</a></div>
                         <div>
-                            <a href="User/StudentInfor/systemMsge.html">学院通知</a></div>
-                        
+                            <a href="../User/StudentInfor/systemMsge">学院通知</a></div>
+
                     </div>
-                    <div class="ta1">
-                        <strong>答疑汇总</strong>
-                        <div class="leftbgbt2">
-                        </div>
-                    </div>
-                    <div class="cdlist">
-                        <div>
-                            <a href="EducationCenter/Application.html">答疑数量</a></div>
-                        <div>
-                            <a href="EducationCenter/Score.html">答疑汇总</a></div>
-                        <div>
-                            <a href="EducationCenter/Book.html">答疑概况分析</a></div>
-							<div>
-                            <a href="EducationCenter/Book.html">答疑反馈问题</a></div>
-							<div>
-                            <a href="EducationCenter/Book.html">反馈问题分析</a></div>
-							
-                            
-                    </div>
+
                     <div class="ta1">
                         <strong>预约答疑</strong><div class="leftbgbt2">
-                        </div>
+                    </div>
                     </div>
                     <div class="cdlist">
                         <div>
-                            <a href="OnlineTeaching/StudentMaterial.html">上传时间表</a></div>
+                            <a href="StudentMaterial">上传时间表</a></div>
                         <div>
-                            <a href="OnlineTeaching/StudentStudyRecordList.html">预约申请</a></div>
-							<div>
-                            <a href="OnlineTeaching/StudentStudyRecordList.html">预约完成情况</a></div>
+                            <a href="StudentStudyRecordList">预约申请</a></div>
+                        <div>
+                            <a href="OrderFinish">预约完成情况</a></div>
                     </div>
-<div class="ta1">
-                        <a href="http://www.csgb.net/login.aspx?userLoginName=2014&userName=方海诺&professionId=F40C998A-D9AC-421F-99C9-C024C1DC53AD&flag=sm" target="_blank"><strong>教学系统</strong></a>
-                        <div class="leftbgbt2">
-                        </div>
-                    </div>
+
+
                 </div>
             </div>
             <div class="rightbox">
                 
-    <h2 class="mbx">
-        教学中心 &gt; 我的学习历程</h2>
-    <div class="history">
-        <div class="history-date">
-            <ul id="hData">
-            </ul>
-        </div>
-    </div>
-    <div class="time_bm">
-        2013.08.16我参与了课程设计题目讨论！</div>
-		<div class="time_2">
-        2013.08.17我参与了毕业设计题目讨论！</div>
-		<div class="time_3">
-        2013.08.18我参与了Java学习方向问题讨论！</div>
+            <h2 class="mbx">教学中心 &gt; 我的学习历程</h2>
+                <div class="cztable">
+                    <table class="table table-hover" style="text-align:center;">
+                        <thead   class="ttt">
+                        <th class="ttt">编号</th>
+                        <th class="ttt" >时间</th>
+                        <th class="ttt">学生</th>
+                        <th class="ttt">操作</th>
+                        </thead>
+                        <tbody id="tbody1" name="tbody1">
+                        <tr>
+                            <th >1</th>
+                            <th >2018年11月7日10:00</th>
+                            <th >未预约</th>
+                            <th >
+                                <button type="button" class="btn btn-success">同意</button>
+                                <button type="button" class="btn btn-danger">不同意</button>
+                            </th>
+                        </tr>
+                        </tbody>
+
+                    </table>
+                </div>
+
 		
     <input type="hidden" id="stuId" value="7c50f70a-775b-4aef-8bf2-5010ec612c0d" />
-    <script type="text/javascript">
-        var pageIndex = 1; //当前加载页数
-        var hasData = true; //是否还有数据可以加载
-        var yearData = ""; //年份
-        var monthData = ""; //月.日
-        var $dt = null; //追加数据的jq对象
-        function loadData() {
-            if (hasData) {
-                var stuId = $("#stuId").val();
-                if (stuId.length > 1) {
-                    $.ajax({
-                        url: "StudyGetData.ashx",
-                        type: "post",
-                        data: "stuId=" + stuId + "&pageIndex=" + pageIndex,
-                        success: function (data) {
-                            pageIndex++;
-                            var s1 = data.split('$1$')[0];
-                            if (s1 == "0") {
-                                hasData = false;
-                            }
-                            var s2 = data.split('$1$')[1];
-                            showData(s2);
-                        }
-                    });
-                }
-            }
-        }
-        function showData(str) {
-            var s3 = str.split('$3$');
-            for (i = 0; i < s3.length; i++) {
-                var s4 = s3[i].split('$2$');
-                if (s4[0] != yearData) {
-                    var t = "<li><h2 class='first'><a href='#nogo'>" + s4[0] + "年</a></h2></li>";
-                    $("#hData").append(t);
-                    yearData = s4[0];
-                }
-                if (s4[1] != monthData) {
-                    var $li = $("<li class='green'><h3>" + s4[1] + "<span>" + yearData + "</span></h3></li>");
-                    var $div = $("<div class='lc_right'></div>");
-                    var $dl = $("<dl></dl>");
-                    var $tdiv = $("<div class='time_ico'></div>");
-                    $dt = $("<dt></dt>");
-                    $dt.appendTo($dl);
-                    $tdiv.appendTo($dl);
-                    $dl.appendTo($div);
-                    $div.appendTo($li);
-                    $li.appendTo($("#hData"));
-                    monthData = s4[1];
-                }
-                if ($dt) {
-                    var pathA = s4[6];
-                    var $span;
-                    if (pathA.length < 1) {
-                        $span = $("<span>" + s4[2] + " " + s4[3] + "<a>" + s4[4] + "</a>  " + s4[5] + "</span>");
-                    } else {
-                        $span = $("<span>" + s4[2] + " " + s4[3] + "<a href='" + pathA + "' target='_blank'>" + s4[4] + "</a>  " + s4[5] + "</span>");
-                    }
-                    $dt.append($span);
-                }
-            }
-        }
 
-        function reachBottom() {
-            var scrollTop = 0;
-            var clientHeight = 0;
-            var scrollHeight = 0;
-            if (document.documentElement && document.documentElement.scrollTop) {
-                scrollTop = document.documentElement.scrollTop;
-            } else if (document.body) {
-                scrollTop = document.body.scrollTop;
-            }
-            if (document.body.clientHeight && document.documentElement.clientHeight) {
-                clientHeight = (document.body.clientHeight < document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
-            } else {
-                clientHeight = (document.body.clientHeight > document.documentElement.clientHeight) ? document.body.clientHeight : document.documentElement.clientHeight;
-            }
-            scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-            alert(scrollTop);
-            if (scrollTop + clientHeight == scrollHeight) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-        $(function () {
-            $(window).scroll(function () {
-                var sTop = $(this).scrollTop();
-                var sHeight = $(this).height();
-                var scrollHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
-                if (sTop + sHeight == scrollHeight) {
-                    loadData();
-                }
-            });
-            loadData();
-        });
-     
-    </script>
 
             </div>
         </div>
@@ -294,5 +166,20 @@
                 &copy;有问题欢迎致电18846189787</p>
         </div>
     </div>
+<div class="modal fade" role="dialog" id="mymodal">
+    <div class="modal-dialog" role="document">
+
+            <div class="modal-body">
+                    <label class="label label-default">请输入答疑地点</label>
+                <br>
+                <br>
+                    <input type="text" class="form-control" id="place" name="place" />
+                <br>
+                <br>
+                    <button type="button" class="btn btn-success" onclick="agreeOd()">确认</button>
+                <br>
+            </div>
+    </div>
+</div>
 </body>
 </html>

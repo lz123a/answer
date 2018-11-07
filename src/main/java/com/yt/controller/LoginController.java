@@ -1,19 +1,22 @@
 package com.yt.controller;
 
-import com.yt.domain.Clas;
-import com.yt.domain.College;
-import com.yt.domain.Student;
-import com.yt.domain.User;
+import com.yt.domain.*;
 import com.yt.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpSession;
 import java.rmi.MarshalledObject;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
+import static com.yt.config.WebSecurityConfig.SESSION_KEY;
+
+@Controller
 public class LoginController {
 
     @Autowired
@@ -29,8 +32,29 @@ public class LoginController {
     @Autowired
     ProfessionalRepository professionalRepository;
 
-    @RequestMapping("/registPost")
-    public  Map<String,Object> registPost(String name,String clas,String stu_id,String sex,String phone,String uid,String psword,String department,String professional){
+    @PostMapping("/loginteacher")
+    public @ResponseBody
+    Map<String ,Object> teacherLogin(String uid,String psword,int idenity,HttpSession session){
+        Map<String,Object> map = new HashMap<>();
+        User user = userRepository.findByUidAndPswordAndIdentity(uid,psword,idenity);
+        System.out.println(uid+" "+psword+" "+idenity);
+        if(user!=null){
+            map.put("success",true);
+            map.put("message","登录成功");
+            Teacher teacher = user.getTeacher();
+            session.setAttribute(SESSION_KEY, teacher.getName());
+
+        }else{
+            map.put("success",false);
+            map.put("message","账号密码错误");
+        }
+
+
+        return map;
+    }
+
+    @RequestMapping("/app/registPost")
+    public  @ResponseBody Map<String,Object> registPost(String name,String clas,String stu_id,String sex,String phone,String uid,String psword,String department,String professional){
         Map<String,Object> map = new HashMap<>();
 
         Student student = new Student();
@@ -61,8 +85,8 @@ public class LoginController {
         return clasRepository.save(clas);
     }
 
-    @RequestMapping("/loginPost")
-    public Map<String,Object> loginPost(String uid,String psword,String identity){
+    @RequestMapping("/app/loginPost")
+    public @ResponseBody Map<String,Object> loginPost(String uid,String psword,String identity){
         Map<String,Object> map = new HashMap<>();
         System.out.println(uid+"  "+psword+"  "+identity);
         User user = new User();

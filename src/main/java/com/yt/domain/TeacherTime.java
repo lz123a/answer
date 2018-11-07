@@ -7,8 +7,10 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
+@Table(name = "teacher_time")
 public class TeacherTime {
     @Id
+    @GeneratedValue
     private int id;
 
     private Date answerTime;
